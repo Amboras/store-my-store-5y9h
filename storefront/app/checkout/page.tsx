@@ -3,241 +3,205 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { useCart } from '@/hooks/use-cart'
+import { ChevronRight, ShoppingBag, Lock } from 'lucide-react'
 
 export default function CheckoutPage() {
   const { cart, itemCount, subtotal, total, isLoading } = useCart()
 
-  // Calculate formatted prices
-  const formattedSubtotal = new Intl.NumberFormat('en-IN', {
-    style: 'currency',
-    currency: 'INR',
-    minimumFractionDigits: 0,
-    maximumFractionDigits: 0,
-  }).format((subtotal || 0) / 100)
-
-  const formattedTotal = new Intl.NumberFormat('en-IN', {
-    style: 'currency',
-    currency: 'INR',
-    minimumFractionDigits: 0,
-    maximumFractionDigits: 0,
-  }).format((total || 0) / 100)
+  const formatPrice = (amount: number) =>
+    new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(amount / 100)
 
   const hasItems = cart?.items && cart.items.length > 0
 
   return (
-    <div className="container mx-auto px-4 py-12">
-      <h1 className="text-4xl font-bold text-gray-900 mb-8">Checkout</h1>
+    <>
+      <div className="border-b">
+        <div className="container-custom py-3">
+          <nav className="flex items-center gap-2 text-xs text-muted-foreground">
+            <Link href="/" className="hover:text-foreground transition-colors">Home</Link>
+            <ChevronRight className="h-3 w-3" />
+            <span className="text-foreground">Checkout</span>
+          </nav>
+        </div>
+      </div>
 
-      <div className="grid lg:grid-cols-3 gap-8">
-        {/* Checkout Form */}
-        <div className="lg:col-span-2 space-y-6">
-          {/* Shipping Information */}
-          <div className="bg-white border rounded-lg p-6">
-            <h2 className="text-xl font-semibold mb-4">Shipping Information</h2>
-            <div className="grid md:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  First Name *
-                </label>
+      <div className="container-custom py-8 lg:py-12">
+        <h1 className="text-h2 font-heading font-semibold mb-8">Checkout</h1>
+
+        <div className="grid lg:grid-cols-[1fr_380px] gap-10 lg:gap-16">
+          {/* Form */}
+          <div className="space-y-8">
+            {/* Contact */}
+            <section>
+              <h2 className="text-xs uppercase tracking-widest font-semibold mb-4">Contact</h2>
+              <input
+                type="email"
+                placeholder="Email address"
+                className="w-full border-b border-foreground/20 bg-transparent px-0 py-3 text-sm placeholder:text-muted-foreground focus:border-foreground focus:outline-none transition-colors"
+              />
+            </section>
+
+            {/* Shipping */}
+            <section>
+              <h2 className="text-xs uppercase tracking-widest font-semibold mb-4">Shipping Address</h2>
+              <div className="grid grid-cols-2 gap-4">
                 <input
                   type="text"
-                  className="w-full border rounded-md px-3 py-2"
-                  placeholder="John"
+                  placeholder="First name"
+                  className="border-b border-foreground/20 bg-transparent px-0 py-3 text-sm placeholder:text-muted-foreground focus:border-foreground focus:outline-none transition-colors"
                 />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Last Name *
-                </label>
                 <input
                   type="text"
-                  className="w-full border rounded-md px-3 py-2"
-                  placeholder="Doe"
+                  placeholder="Last name"
+                  className="border-b border-foreground/20 bg-transparent px-0 py-3 text-sm placeholder:text-muted-foreground focus:border-foreground focus:outline-none transition-colors"
                 />
-              </div>
-              <div className="md:col-span-2">
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Email *
-                </label>
-                <input
-                  type="email"
-                  className="w-full border rounded-md px-3 py-2"
-                  placeholder="john@example.com"
-                />
-              </div>
-              <div className="md:col-span-2">
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Address *
-                </label>
                 <input
                   type="text"
-                  className="w-full border rounded-md px-3 py-2"
-                  placeholder="123 Main St"
+                  placeholder="Address"
+                  className="col-span-2 border-b border-foreground/20 bg-transparent px-0 py-3 text-sm placeholder:text-muted-foreground focus:border-foreground focus:outline-none transition-colors"
                 />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  City *
-                </label>
                 <input
                   type="text"
-                  className="w-full border rounded-md px-3 py-2"
-                  placeholder="Bangalore"
+                  placeholder="City"
+                  className="border-b border-foreground/20 bg-transparent px-0 py-3 text-sm placeholder:text-muted-foreground focus:border-foreground focus:outline-none transition-colors"
                 />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Postal Code *
-                </label>
                 <input
                   type="text"
-                  className="w-full border rounded-md px-3 py-2"
-                  placeholder="560001"
+                  placeholder="Postal code"
+                  className="border-b border-foreground/20 bg-transparent px-0 py-3 text-sm placeholder:text-muted-foreground focus:border-foreground focus:outline-none transition-colors"
                 />
-              </div>
-              <div className="md:col-span-2">
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Phone Number *
-                </label>
+                <input
+                  type="text"
+                  placeholder="State / Province"
+                  className="border-b border-foreground/20 bg-transparent px-0 py-3 text-sm placeholder:text-muted-foreground focus:border-foreground focus:outline-none transition-colors"
+                />
                 <input
                   type="tel"
-                  className="w-full border rounded-md px-3 py-2"
-                  placeholder="+91 98765 43210"
+                  placeholder="Phone (optional)"
+                  className="border-b border-foreground/20 bg-transparent px-0 py-3 text-sm placeholder:text-muted-foreground focus:border-foreground focus:outline-none transition-colors"
                 />
               </div>
-            </div>
+            </section>
+
+            {/* Shipping Method */}
+            <section>
+              <h2 className="text-xs uppercase tracking-widest font-semibold mb-4">Shipping Method</h2>
+              <div className="space-y-2">
+                <label className="flex items-center justify-between p-4 border rounded-sm cursor-pointer hover:border-foreground transition-colors">
+                  <div className="flex items-center gap-3">
+                    <input type="radio" name="shipping" defaultChecked className="accent-foreground" />
+                    <div>
+                      <p className="text-sm font-medium">Standard Shipping</p>
+                      <p className="text-xs text-muted-foreground">5-7 business days</p>
+                    </div>
+                  </div>
+                  <span className="text-sm font-medium">Free</span>
+                </label>
+                <label className="flex items-center justify-between p-4 border rounded-sm cursor-pointer hover:border-foreground transition-colors">
+                  <div className="flex items-center gap-3">
+                    <input type="radio" name="shipping" className="accent-foreground" />
+                    <div>
+                      <p className="text-sm font-medium">Express Shipping</p>
+                      <p className="text-xs text-muted-foreground">2-3 business days</p>
+                    </div>
+                  </div>
+                  <span className="text-sm font-medium">$12.00</span>
+                </label>
+              </div>
+            </section>
+
+            {/* Payment */}
+            <section>
+              <h2 className="text-xs uppercase tracking-widest font-semibold mb-4">Payment</h2>
+              <div className="border rounded-sm p-6 text-center text-muted-foreground">
+                <Lock className="h-5 w-5 mx-auto mb-2" strokeWidth={1.5} />
+                <p className="text-sm">Payment integration coming soon</p>
+                <p className="text-xs mt-1">Stripe, PayPal, and more</p>
+              </div>
+            </section>
+
+            {/* Place Order */}
+            <button
+              disabled
+              className="w-full bg-foreground text-background py-4 text-sm font-semibold uppercase tracking-wide opacity-50 cursor-not-allowed"
+            >
+              Place Order
+            </button>
           </div>
 
-          {/* Payment Method */}
-          <div className="bg-white border rounded-lg p-6">
-            <h2 className="text-xl font-semibold mb-4">Payment Method</h2>
-            <div className="space-y-3">
-              <label className="flex items-center p-4 border rounded-lg cursor-pointer hover:bg-gray-50">
-                <input
-                  type="radio"
-                  name="payment"
-                  defaultChecked
-                  className="mr-3"
-                />
-                <div>
-                  <div className="font-medium">Credit / Debit Card</div>
-                  <div className="text-sm text-gray-500">Pay with Stripe</div>
+          {/* Order Summary */}
+          <div>
+            <div className="sticky top-24 border rounded-sm p-6">
+              <h2 className="text-xs uppercase tracking-widest font-semibold mb-6">Order Summary</h2>
+
+              {isLoading ? (
+                <div className="space-y-3 animate-pulse">
+                  {[1, 2].map((i) => (
+                    <div key={i} className="flex gap-3">
+                      <div className="h-16 w-14 bg-muted rounded-sm" />
+                      <div className="flex-1 space-y-2">
+                        <div className="h-3 w-2/3 bg-muted rounded" />
+                        <div className="h-3 w-1/3 bg-muted rounded" />
+                      </div>
+                    </div>
+                  ))}
                 </div>
-              </label>
-              <label className="flex items-center p-4 border rounded-lg cursor-pointer hover:bg-gray-50">
-                <input type="radio" name="payment" className="mr-3" />
-                <div>
-                  <div className="font-medium">Cash on Delivery</div>
-                  <div className="text-sm text-gray-500">Pay when you receive</div>
+              ) : !hasItems ? (
+                <div className="text-center py-8">
+                  <ShoppingBag className="mx-auto h-8 w-8 text-muted-foreground/40" strokeWidth={1.5} />
+                  <p className="mt-3 text-sm text-muted-foreground">Your bag is empty</p>
+                  <Link href="/products" className="mt-3 inline-block text-sm font-semibold underline underline-offset-4">
+                    Continue Shopping
+                  </Link>
                 </div>
-              </label>
-            </div>
-          </div>
-        </div>
-
-        {/* Order Summary */}
-        <div className="lg:col-span-1">
-          <div className="bg-white border rounded-lg p-6 sticky top-24">
-            <h2 className="text-xl font-semibold mb-4">Order Summary</h2>
-
-            {isLoading ? (
-              <div className="text-center py-8">
-                <div className="animate-spin mx-auto h-8 w-8 border-4 border-gray-300 border-t-blue-600 rounded-full"></div>
-              </div>
-            ) : !hasItems ? (
-              // Cart Empty State
-              <div className="text-center py-8">
-                <svg
-                  className="mx-auto h-12 w-12 text-gray-400 mb-3"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={1.5}
-                    d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"
-                  />
-                </svg>
-                <p className="text-sm text-gray-500 mb-4">Your cart is empty</p>
-                <Link
-                  href="/products"
-                  className="text-blue-600 hover:text-blue-700 text-sm font-medium"
-                >
-                  Continue Shopping
-                </Link>
-              </div>
-            ) : (
-              <>
-                {/* Cart Items */}
-                <div className="space-y-3 mb-6 max-h-64 overflow-y-auto">
-                  {cart.items?.map((item: any) => {
-                    const itemPrice = new Intl.NumberFormat('en-IN', {
-                      style: 'currency',
-                      currency: 'INR',
-                      minimumFractionDigits: 0,
-                      maximumFractionDigits: 0,
-                    }).format((item.unit_price || 0) / 100)
-
-                    return (
-                      <div key={item.id} className="flex gap-3 text-sm">
-                        <div className="relative h-16 w-16 flex-shrink-0 overflow-hidden rounded bg-gray-100">
+              ) : (
+                <>
+                  <div className="space-y-4 mb-6">
+                    {cart.items?.map((item: any) => (
+                      <div key={item.id} className="flex gap-3">
+                        <div className="relative h-16 w-14 flex-shrink-0 overflow-hidden bg-muted rounded-sm">
                           {item.thumbnail ? (
-                            <Image
-                              src={item.thumbnail}
-                              alt={item.title}
-                              fill
-                              className="object-cover"
-                            />
+                            <Image src={item.thumbnail} alt={item.title} fill className="object-cover" />
                           ) : (
-                            <div className="flex h-full items-center justify-center text-gray-400">
-                              <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                              </svg>
+                            <div className="flex h-full items-center justify-center text-muted-foreground/30">
+                              <ShoppingBag className="h-4 w-4" />
                             </div>
                           )}
+                          <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-foreground text-[9px] font-bold text-background">
+                            {item.quantity}
+                          </span>
                         </div>
-                        <div className="flex-1">
-                          <p className="font-medium line-clamp-1">{item.title}</p>
-                          <p className="text-gray-600">Qty: {item.quantity}</p>
-                          <p className="font-semibold">{itemPrice}</p>
+                        <div className="flex-1 min-w-0">
+                          <p className="text-sm font-medium truncate">{item.title}</p>
+                          {item.variant?.title && item.variant.title !== 'Default' && (
+                            <p className="text-xs text-muted-foreground">{item.variant.title}</p>
+                          )}
                         </div>
+                        <p className="text-sm font-medium">{formatPrice(item.unit_price)}</p>
                       </div>
-                    )
-                  })}
-                </div>
+                    ))}
+                  </div>
 
-                {/* Summary */}
-                <div className="space-y-3 text-sm mb-6 border-t pt-4">
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">Subtotal</span>
-                    <span className="font-semibold">{formattedSubtotal}</span>
+                  <div className="space-y-2 text-sm border-t pt-4">
+                    <div className="flex justify-between">
+                      <span className="text-muted-foreground">Subtotal</span>
+                      <span>{formatPrice(subtotal)}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-muted-foreground">Shipping</span>
+                      <span className="text-muted-foreground">Calculated</span>
+                    </div>
+                    <div className="flex justify-between border-t pt-2 mt-2">
+                      <span className="font-semibold">Total</span>
+                      <span className="font-heading text-lg font-semibold">{formatPrice(total)}</span>
+                    </div>
                   </div>
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">Shipping</span>
-                    <span className="font-semibold">Calculated at next step</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">Tax</span>
-                    <span className="font-semibold">Calculated at next step</span>
-                  </div>
-                  <div className="border-t pt-3 flex justify-between text-base">
-                    <span className="font-semibold">Total</span>
-                    <span className="font-bold text-lg">{formattedTotal}</span>
-                  </div>
-                </div>
-
-                <button
-                  className="w-full bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-md font-semibold transition"
-                >
-                  Place Order
-                </button>
-              </>
-            )}
+                </>
+              )}
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </>
   )
 }
