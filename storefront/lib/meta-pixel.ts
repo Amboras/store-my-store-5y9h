@@ -129,6 +129,8 @@ export function onMetaPixelReady(callback: () => void): () => void {
   return () => window.removeEventListener(LOADED_EVENT, handler)
 }
 
+const IS_DEV = process.env.NODE_ENV !== 'production'
+
 function persistEventId(key: string, eventId: string): void {
   if (!canUseBrowserApi()) return
 
@@ -141,8 +143,14 @@ function persistEventId(key: string, eventId: string): void {
     }).slice(-MAX_STORED_EVENT_IDS)
 
     sessionStorage.setItem(EVENT_ID_STORAGE_KEY, JSON.stringify(Object.fromEntries(nextEntries)))
-  } catch {
-    // ignore storage failures
+  } catch (err) {
+    // sessionStorage can throw on quota exceeded, privacy mode, or corrupted
+    // JSON. Losing a Meta event_id just means the server-side dedupe key
+    // won't match — not fatal — so we swallow. Log in dev so corruption
+    // isn't invisible to developers.
+    if (IS_DEV) {
+      console.warn('[meta-pixel] Failed to persist event id', err)
+    }
   }
 }
 
@@ -154,7 +162,10 @@ export function getStoredMetaEventId(key: string): string | null {
     if (!raw) return null
     const parsed = JSON.parse(raw) as Record<string, string>
     return parsed[key] || null
-  } catch {
+  } catch (err) {
+    if (IS_DEV) {
+      console.warn('[meta-pixel] Failed to read stored event id', err)
+    }
     return null
   }
 }
