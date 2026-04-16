@@ -47,12 +47,12 @@ export default function Footer() {
           {/* Brand */}
           <div className="lg:col-span-1">
             <Link href="/" className="inline-block">
-              <span className="font-heading text-2xl font-semibold">
-                Store
+              <span className="font-heading text-3xl font-semibold" style={{ color: 'var(--brand-primary)' }}>
+                Velura
               </span>
             </Link>
             <p className="mt-4 text-sm text-muted-foreground leading-relaxed max-w-xs">
-              Curated products crafted with care. Quality you can feel, design you can see.
+              Premium shapewear bodysuits engineered for all-day comfort and effortless confidence. Wear less, feel more.
             </p>
           </div>
 
